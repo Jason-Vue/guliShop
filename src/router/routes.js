@@ -11,22 +11,30 @@ export default [{
   },
   {
     'path': '/home',
-    component: Home
+    component: Home,
   },
   {
     'path': '/Login',
-    component: Login
+    component: Login,
+    meta: {
+      isShowFooter: true
+    }
   },
   {
     'path': '/register',
-    component: Register
+    component: Register,
+    meta: {
+      isShowFooter: true
+    }
   },
   {
     'path': '/search',
-    component: Search
+    component: Search,
+
   },
   {
     'path': '/detail',
-    component: Detail
+    component: Detail,
+
   }
 ]
