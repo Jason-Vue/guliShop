@@ -19,6 +19,7 @@ export default {
   },
   mounted () {
     // console.log(typeNavData());
+    this.$store.dispatch('getCategoryList');
   }
 }
 </script>
