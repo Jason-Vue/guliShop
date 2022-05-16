@@ -14,7 +14,7 @@ export default [{
     component: Home,
   },
   {
-    'path': '/Login',
+    'path': '/login',
     component: Login,
     meta: {
       isShowFooter: true
@@ -28,9 +28,9 @@ export default [{
     }
   },
   {
-    'path': '/search',
+    'path': '/search/:keyword',
     component: Search,
-
+    name: 'search'
   },
   {
     'path': '/detail',

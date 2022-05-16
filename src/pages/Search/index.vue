@@ -1,6 +1,8 @@
 <!-- 搜索页 -->
 <template>
-  <div>搜索</div>
+  <div>
+    <Nav-type></Nav-type>
+  </div>
 </template>
 
 <script>
@@ -21,5 +23,4 @@ export default {
 }
 </script>
 <style scoped>
-/* @import url(); 引入css类 */
 </style>

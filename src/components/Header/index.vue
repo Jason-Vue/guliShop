@@ -13,7 +13,7 @@
               <!-- <a href="###">登录</a>
               <a href="###"
                  class="register">免费注册</a> -->
-              <router-link to="/Login">登录</router-link>
+              <router-link to="/login">登录</router-link>
               <router-link to="/register"
                            class="register">免费注册</router-link>
             </p>
@@ -41,16 +41,16 @@
           </router-link>
         </h1>
         <div class="searchArea">
-          <router-link to="/search">
-            <form action="###"
-                  class="searchForm">
-              <input type="text"
-                     id="autocomplete"
-                     class="input-error input-xxlarge" />
-              <button class="sui-btn btn-xlarge btn-danger"
-                      type="button">搜索</button>
-            </form>
-          </router-link>
+          <form action="###"
+                class="searchForm">
+            <input type="text"
+                   id="autocomplete"
+                   class="input-error input-xxlarge"
+                   v-model="kw" />
+            <button class="sui-btn btn-xlarge btn-danger"
+                    type="button"
+                    @click="goSearch()">搜索</button>
+          </form>
         </div>
       </div>
     </header>
@@ -61,7 +61,24 @@
 export default {
   data () {
     return {
-
+      // 搜索关键词
+      kw: ''
+    }
+  },
+  methods: {
+    goSearch () {
+      let location = {
+        name: "search",
+        params: {
+          keyword: this.kw || undefined
+        }
+      }
+      // 判断路由里面是否有query参数,没有的话给它添加到location里
+      if (this.$route.query) {
+        location.query = this.$route.query
+      }
+      // 编程式导航
+      this.$router.push(location)
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
