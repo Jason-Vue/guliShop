@@ -1,13 +1,16 @@
 import {
   reqCategoryList,
-  reqBannerList
+  reqBannerList,
+  reqFloorList
 } from "@/api"
 
 const state = {
   // 存储首页三级分类
   typeNavList: [],
   // 首页轮播数据
-  bannerList: []
+  bannerList: [],
+  // 首页floor数据
+  floorList: []
 }
 
 const actions = {
@@ -24,6 +27,14 @@ const actions = {
     if (result.code == 200) {
       commit('GETBANNERLIST', result.data)
     }
+  },
+  async getFloorList({
+    commit
+  }) {
+    const result = await reqFloorList();
+    if (result.code == 200) {
+      commit("GETFLOORLIST", result.data)
+    }
   }
 }
 
@@ -33,6 +44,9 @@ const mutations = {
   },
   GETBANNERLIST(state, data) {
     state.bannerList = data
+  },
+  GETFLOORLIST(state, data) {
+    state.floorList = data
   }
 }
 
