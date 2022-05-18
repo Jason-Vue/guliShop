@@ -7,10 +7,12 @@
         <div class="center">
           <!--banner轮播-->
           <div class="swiper-container"
-               id="mySwiper">
+               ref="mySwiper">
             <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <img src="./images/banner1.jpg" />
+              <div class="swiper-slide"
+                   v-for="(carousel,index) in bannerList"
+                   :key="carousel.id">
+                <img :src="carousel.imageUrl" />
               </div>
             </div>
             <!-- 如果需要分页器 -->
@@ -106,19 +108,104 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import Swiper from 'swiper'
+
+
 export default {
   data () {
     return {
 
     }
   },
+  computed: {
+    ...mapState({
+      bannerList: state => state.HomeAbout.bannerList
+    })
+  },
   //生命周期 - 创建完成（访问当前this实例）
   created () {
-
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted () {
+    // 1.获取首页轮播数据
+    this.$store.dispatch("getBannerList")
 
+    /* 
+  一定要在挂载完成以后再去实例化swiper
+    1.本来在mounted挂载后是可以的，页面的dom解构就算形成完成，在此去实例化应该是可以的
+    2.但是在这个页面中，这个页面结构中的swiper-slide,是根据请求回来的数据，动态生成的
+    3.所以，我们必须保证请求数据回来之后，再去进行实例化
+    4.所以我们必须保证请求数据回来之后，再去实例化，有了数据，slide的div才会动态创建ok
+  */
+    //  同步代码
+    // 解决办法一；使用定时器setTimeout,不完美setTimeout(() => {},}, 1000)
+    // 解决办法二；watch+nextTick
+
+    // 2.首页轮播图
+    // setTimeout(() => {
+    //   var mySwiper = new Swiper('.swiper-container', {
+    //     // direction: 'vertical', // 垂直切换选项
+    //     // direction: 'horizontal', // 水平切换选项,默认就是横向
+    //     loop: true, // 循环模式选项
+    //     //自动播放
+    //     autoplay: {
+    //       delay: 1000,
+    //       stopOnLastSlide: false,
+    //       disableOnInteraction: true,
+    //     },
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: '.swiper-pagination',
+    //     },
+
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: '.swiper-button-next',
+    //       prevEl: '.swiper-button-prev',
+    //     },
+
+    //     // 如果需要滚动条
+    //     scrollbar: {
+    //       el: '.swiper-scrollbar',
+    //     },
+    //   })
+    // }, 2000)
+  },
+  watch: {
+    bannerList: {
+      handler (newValue, oldValue) {
+        // console.log(newValue, oldValue);
+        this.$nextTick(() => {
+          var mySwiper = new Swiper(this.$refs.mySwiper, {
+            // direction: 'vertical', // 垂直切换选项
+            // direction: 'horizontal', // 水平切换选项,默认就是横向
+            loop: true, // 循环模式选项
+            //自动播放
+            autoplay: {
+              delay: 2000,
+              stopOnLastSlide: false,
+              disableOnInteraction: true,
+            },
+            // 如果需要分页器
+            pagination: {
+              el: '.swiper-pagination',
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+
+            // 如果需要滚动条
+            scrollbar: {
+              el: '.swiper-scrollbar',
+            },
+          })
+        })
+      }
+    }
   }
 }
 </script>

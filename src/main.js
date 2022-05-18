@@ -8,6 +8,10 @@ import store from "@/store/index.js"
 import NavType from "@/components/NavType"
 Vue.component('Nav-type', NavType)
 
+// 引入mock.js
+import "@/mock/mockServer"
+// 引入首页轮播图样式
+import "swiper/css/swiper.css"
 // import {
 //   reqCategoryList
 // } from "@/api"
