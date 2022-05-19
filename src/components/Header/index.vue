@@ -78,6 +78,7 @@ export default {
         location.query = this.$route.query
       }
       // 编程式导航
+      console.log(location);
       this.$router.push(location)
     }
   },
