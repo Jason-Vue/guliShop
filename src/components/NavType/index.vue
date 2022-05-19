@@ -116,7 +116,7 @@ export default {
       let element = event.target;
       // 节点上有一个属性dataset属性，可以获取节点的自定义属性和属性值
       let node = element.dataset;
-      console.log(node);
+      // console.log(node);
       let { categoryname, category1id, category2id, category3id } = element.dataset;
       // 整理编程式导航跳转地址，下面的location里面还要一个query参数对象
       let location = { name: 'search' };
@@ -139,6 +139,7 @@ export default {
       if (this.$route.params) {
         location.params = this.$route.params
       }
+      console.log(location);
       // 跳转到搜索页
       this.$router.push(location)
     },

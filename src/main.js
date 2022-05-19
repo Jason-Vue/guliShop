@@ -12,10 +12,13 @@ Vue.component('Nav-type', NavType)
 import "@/mock/mockServer"
 // 引入首页轮播图样式
 import "swiper/css/swiper.css"
+
+// import "@/api/test"
+
 // import {
-//   reqCategoryList
-// } from "@/api"
-// reqCategoryList()
+//   reqSearchList
+// } from "@/api/index"
+// console.log(reqSearchList());
 
 Vue.config.productionTip = false
 

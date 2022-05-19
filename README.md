@@ -1,24 +1,5 @@
-# my-gulishop
+#谷粒商城
+1.自动运行npm run serve,并且指定host和port
+  >vue-cli-service serve --open --host localhost --port 8010
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+2.
