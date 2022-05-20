@@ -5,7 +5,7 @@
     <!--list-content-->
     <div class="main">
       <div class="py-container">
-        <!--bread-->
+        <!--bread面包屑展示和删除-->
         <div class="bread">
           <ul class="fl sui-breadcrumb">
             <li>
@@ -13,14 +13,27 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- 点击三级分类，通过query参数跳转到搜索页，将categoryName展示到面包屑上 -->
+            <li v-if="searchParams.categoryName"
+                class="with-x">{{searchParams.categoryName}}<i @click="removeCategoryName">x</i></li>
+            <!-- 点击头部搜索按钮 ，通过params方式传参跳转到搜索页，将keyword展示到面包屑上-->
+            <li v-if="searchParams.keyword"
+                class="with-x">{{searchParams.keyword}}<i @click="removeKeyword">x</i></li>
+            <!-- 子组件searchSelector里面的点击品牌名,品牌名展示到面包屑上 -->
+            <li class="with-x"
+                v-if="searchParams.trademark">
+              {{searchParams.trademark.split(':')[1]}}<i @click="removeTradeMark">X</i>
+            </li>
+            <!-- 子组件searchSelector里面点击品台属性名展示在面包屑上 -->
+            <li class="with-x"
+                v-for="(prop,index) in searchParams.props"
+                :key="index">{{prop.split(":")[1]}}<i @click="removeProp(index)">X</i></li>
           </ul>
         </div>
         <!--selector-->
-        <search-selector></search-selector>
+        <search-selector @getTradeMark="
+                 getTradeMark"
+                         @getProp="getProp"></search-selector>
         <!--details商品页-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -230,28 +243,113 @@ export default {
     SearchSelector
   },
   computed: {
-    ...mapGetters(['goodsList', 'attrsList', 'trademarkList'])
+    ...mapGetters(['goodsList'])
   },
   methods: {
+    // 1.发送请求搜索页数据
     getSearchData (searchParams) {
       // console.log(searchParams);
-      this.$store.dispatch("getSearchList", {})
+      this.$store.dispatch("getSearchList", searchParams)
+    },
+    // 2.移除面包屑里query参数方式展示的categoryName
+    removeCategoryName () {
+      // 1.将query方式的参数全部清空
+      /* 
+      其实这里的this.searchParams.categoryName = '';可以改为undefined,这样categoryName
+      就不会成为请求的负载，根本不会出现在searchParams的参数里
+      */
+      this.searchParams.categoryName = '';
+      this.searchParams.category1Id = '';
+      this.searchParams.category2Id = '';
+      this.searchParams.category3Id = '';
+      // 2.发送请求
+      this.getSearchData(this.searchParams);
+      // 3.我们看到网址栏里面的路由不对，所以我们自己跳转自己。并且因为我们是从三级分类以query方式
+      // 跳转到搜索页，所以如果路由上有params参数，我们还要保留params参数
+      if (this.$route.params) {
+        this.$router.push({ name: 'search', params: this.$route.params });
+      }
+    },
+    // 3.移除面包屑里params参数方式展示keyword
+    removeKeyword () {
+      // 1.清空关键字
+      this.searchParams.keyword = '';
+      // 2.发送请求
+      this.getSearchData(this.searchParams);
+      // 3.修改路由地址正确
+      if (this.$route.query) {
+        this.$router.push({ name: 'search', query: this.$route.query })
+      }
+      // 4.我们上面清空的关键字只是清空了searchParams里面的关键字，我们现在要清空的是在Header
+      // 组件里面的input框里面的文字，这里因为输入不同层级的组件，这里我们使用eventbus(全局事件总线)进行通信
+      this.$bus.$emit("removeKw")
+    },
+    // 4.向子组件searchSelector传递自定义函数
+    getTradeMark (params) {
+      // 1.整理searchParams
+      this.searchParams.trademark = `${params.tmId}:${params.tmName}`;
+      // 2.发送请求
+      this.getSearchData(this.searchParams)
+    },
+    // 5.移除面包屑上的品牌名
+    removeTradeMark () {
+      // 清空关键字
+      this.searchParams.trademark = undefined;
+      // 发送请求
+      this.getSearchData(this.searchParams);
+    },
+    // 6.获取平台属性回调函数
+    getProp (attr, propName) {
+      // 商品属性的数组: ["属性ID:属性值:属性名"]
+      // ["2:6.0～6.24英寸:屏幕尺寸"]
+      // console.log(attr, propName);
+      let attrName = `${attr.attrId}:${propName}:${attr.attrName}`;
+      // 数组去重
+      if (this.searchParams.props.indexOf(attrName) == -1) {
+        this.searchParams.props.push(attrName);
+      }
+      this.getSearchData(this.searchParams)
+    },
+    // 7.移除平台属性事件
+    removeProp (index) {
+      // 从数据组中删除一个元素
+      this.searchParams.props.splice(index, 1);
+      this.getSearchData(this.searchParams)
     }
   },
-  //生命周期 - 创建完成（访问当前this实例）
+  watch: {
+    /*  Bug原因分析：
+       因为第一次我们从别的页面跳转到Search.vue的页面时，已经执行了一次beforeMounted和Mounted,
+       而我们再一次在Search.vue里面进行搜索时，因为还是在Seacrh.vue页面里，所以没有反应
+     只有URL有变化，所以我们监视watch路由的变化 */
+    $route (newVal, oldVal) {
+      // console.log(newVal, oldVal);
+      // 需要再次整理下SearchParams,因为beforeMount()生命周期也只能执行一次，现在路由发生变化的话，再整理一次
+      Object.assign(this.searchParams, this.$route.query, this.$route.params)
+      // 再次调用请求数据
+      this.getSearchData(this.searchParams)
+      // console.log(this.searchParams);
+      // 清除category1Id,category2Id,category3Id,不然它们不会清除，而是会全部累加
+      this.searchParams.category1Id = undefined;
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category3Id = undefined
+    }
+  },
   created () {
-    // 1.处理搜索的参数SearchParams(复杂写法)
-    this.searchParams.category1Id = this.$route.query.category1Id;
-    this.searchParams.category2Id = this.$route.query.category2Id;
-    this.searchParams.category3Id = this.$route.query.category3Id;
-    this.searchParams.categoryName = this.$route.query.categoryName;
-    this.searchParams.keyword = this.$route.params.keyword
-
-    // 2.利用Object.assign()方法处理
 
   },
+  // 当组件挂载之前执行一次，将数据挂载上去
   beforeMount () {
+    // 1.处理搜索的参数SearchParams(复杂写法)
+    // this.searchParams.category1Id = this.$route.query.category1Id;
+    // this.searchParams.category2Id = this.$route.query.category2Id;
+    // this.searchParams.category3Id = this.$route.query.category3Id;
+    // this.searchParams.categoryName = this.$route.query.categoryName;
+    // this.searchParams.keyword = this.$route.params.keyword
 
+    // 2.利用Object.assign()方法处理：ES6新增语法，合并对象
+    // 将后面两个对象赋值给前面存在的对象
+    Object.assign(this.searchParams, this.$route.query, this.$route.params)
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted () {
