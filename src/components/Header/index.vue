@@ -66,6 +66,7 @@ export default {
     }
   },
   methods: {
+    // 1.搜索页面
     goSearch () {
       let location = {
         name: "search",
@@ -88,7 +89,9 @@ export default {
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted () {
-
+    this.$bus.$on("removeKw", () => {
+      this.kw = ''
+    })
   }
 }
 </script>
