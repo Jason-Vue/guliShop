@@ -31,6 +31,51 @@
         1.当点击的sortFlag和原始的order里面的一致,那么就sortType就相反
         2.当点击的sortFlag和原始的order不一致，那么新的order就是`${sortFlag}:desc`，因为默认排序就是'desc'  
 
+------------------------------------------------------------------------------------------------------------
+
+11.分页器
+   一.分页器需要哪些数据？
+    1.total:数据总条数，父组件给
+    2.pageSize:每页展示多少条？父组件给
+    3.totalPage:总共是多少页面。可以根据total和pageSize算出来
+    4.pageNo:当前是第几页？父组件给
+    5.continueNum:连续页码。父组件给
+  二.除了总页数可以自己算出来，其余四项必须父组件给
+  三.封装startAndEnd函数获取contonueNum的起始start,结束end
+  3.1  start页码小于等于1时 
+    pageNo    continueNum
+      5          5
+    34567
+
+      1          5
+      理应：-1 0 1 2 3         
+      实际：1 2 3 4 5
+
+      2          5
+      理应:0 1 2 3 4
+      实际:1 2 3 4 5
+
+      3          5
+      1 2 3 4 5
+
+      所以要进行判断:start小于等于1时，start等于1；end就是continueNum
+  
+  3.2 end页码还大于pageNo
+     pageNo  continueNum
+      11          5
+     理应:  9 10 11 12 13
+     实际； 7 8 9 10 11   (因为totalPage为11，total为101 ，pagesize为10)
+
+      10         5
+     理应: 8 9 10 11 12
+     实际: 7 8 9 10 11   (因为totalPage为11，total为101 ，pagesize为10)
+     
+      9           5
+     理应: 7 8 9 10 11 
+     实际: 7 8 9 10 11   (因为totalPage为11，total为101 ，pagesize为10)
+    
+
+
 
         
 

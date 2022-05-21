@@ -95,35 +95,12 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination :pageNo="pageNo"
+                      :pageSize="pageSize"
+                      :total="total"
+                      :totalPage="totalPage"
+                      :continueNum='5'
+                      @changePageNum="changePageNum"></Pagination>
         </div>
         <!--hotsale-->
         <div class="clearfix hot-sale">
@@ -216,7 +193,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters, mapState } from "vuex"
 import SearchSelector from "./SearchSelector.vue"
 export default {
   data () {
@@ -229,7 +206,9 @@ export default {
         "categoryName": "",
         "keyword": "",
         "order": "2:asc",
+        // 当前页面
         "pageNo": 1,
+        // 每页数据条数
         "pageSize": 10,
         "props": [],
         "trademark": ""
@@ -241,6 +220,13 @@ export default {
   },
   computed: {
     ...mapGetters(['goodsList']),
+    // 2.计算出searchList里面的Vuex关于分页器的数据
+    ...mapState({
+      total: state => state.SearchAbout.searchList.total,
+      totalPage: state => state.SearchAbout.searchList.totalPages,
+      pageSize: state => state.SearchAbout.searchList.pageSize,
+      pageNo: state => state.SearchAbout.searchList.pageNo
+    }),
     //1.商品排序是否是综合排序
     isOne () {
       // console.log(this.searchParams.order.split(':')[0] == 1);
@@ -343,6 +329,11 @@ export default {
       // 重新给order赋值
       this.searchParams.order = newOrder;
       //再次发送请求
+      this.getSearchData(this.searchParams)
+    },
+    //9.分页器改变页码点击事件的回调
+    changePageNum (page) {
+      this.searchParams.pageNo = page;
       this.getSearchData(this.searchParams)
     }
   },
@@ -591,82 +582,6 @@ export default {
                 }
               }
             }
-          }
-        }
-      }
-      .page {
-        width: 733px;
-        height: 66px;
-        overflow: hidden;
-        float: right;
-        .sui-pagination {
-          margin: 18px 0;
-          ul {
-            margin-left: 0;
-            margin-bottom: 0;
-            vertical-align: middle;
-            width: 490px;
-            float: left;
-            li {
-              line-height: 18px;
-              display: inline-block;
-              a {
-                position: relative;
-                float: left;
-                line-height: 18px;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #e0e9ee;
-                margin-left: -1px;
-                font-size: 14px;
-                padding: 9px 18px;
-                color: #333;
-              }
-              &.active {
-                a {
-                  background-color: #fff;
-                  color: #e1251b;
-                  border-color: #fff;
-                  cursor: default;
-                }
-              }
-              &.prev {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-              &.disabled {
-                a {
-                  color: #999;
-                  cursor: default;
-                }
-              }
-              &.dotted {
-                span {
-                  margin-left: -1px;
-                  position: relative;
-                  float: left;
-                  line-height: 18px;
-                  text-decoration: none;
-                  background-color: #fff;
-                  font-size: 14px;
-                  border: 0;
-                  padding: 9px 18px;
-                  color: #333;
-                }
-              }
-              &.next {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-            }
-          }
-          div {
-            color: #333;
-            font-size: 14px;
-            float: right;
-            width: 241px;
           }
         }
       }

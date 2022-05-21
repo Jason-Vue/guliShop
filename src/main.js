@@ -6,7 +6,9 @@ import store from "@/store/index.js"
 
 // 全局组件
 import NavType from "@/components/NavType"
+import Pagination from "@/components/Pagination"
 Vue.component('Nav-type', NavType)
+Vue.component('Pagination', Pagination)
 
 // 引入mock.js
 import "@/mock/mockServer"
