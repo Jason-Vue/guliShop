@@ -31,32 +31,29 @@
           </ul>
         </div>
         <!--selector-->
-        <search-selector @getTradeMark="
-                 getTradeMark"
+        <search-selector @getTradeMark="getTradeMark"
                          @getProp="getProp"></search-selector>
         <!--details商品页-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <!-- 排序 -->
+            <!-- 第二步：再用图标动态显示
+            1.用啥图标
+            2.图标什么时候出现:和背景色一样，谁有背景色谁就有图标
+            3.图标是向上还是向下：和数据类型相关，asc和desc -->
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active:isOne}"
+                    @click="handleSort('1')">
+                  <a>综合<i class="iconfont"
+                       v-if="isOne"
+                       :class="{iconup:isAsc,icondown:isDesc}"></i></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active:isTwo}"
+                    @click="handleSort('2')">
+                  <a>销量<i class="iconfont"
+                       v-if="isTwo"
+                       :class="{iconup:isAsc,icondown:isDesc}"></i></a>
                 </li>
               </ul>
             </div>
@@ -231,7 +228,7 @@ export default {
         "category3Id": "",
         "categoryName": "",
         "keyword": "",
-        "order": "1:desc",
+        "order": "2:asc",
         "pageNo": 1,
         "pageSize": 10,
         "props": [],
@@ -243,7 +240,21 @@ export default {
     SearchSelector
   },
   computed: {
-    ...mapGetters(['goodsList'])
+    ...mapGetters(['goodsList']),
+    //1.商品排序是否是综合排序
+    isOne () {
+      // console.log(this.searchParams.order.split(':')[0] == 1);
+      return this.searchParams.order.split(':')[0] == 1
+    },
+    isTwo () {
+      return this.searchParams.order.split(':')[0] == 2
+    },
+    isAsc () {
+      return this.searchParams.order.split(":")[1] == 'asc'
+    },
+    isDesc () {
+      return this.searchParams.order.split(":")[1] == 'desc'
+    }
   },
   methods: {
     // 1.发送请求搜索页数据
@@ -314,6 +325,24 @@ export default {
     removeProp (index) {
       // 从数据组中删除一个元素
       this.searchParams.props.splice(index, 1);
+      this.getSearchData(this.searchParams)
+    },
+    // 8.解决综合排序和销量排序
+    handleSort (sortFlag) {
+      let originOrder = this.searchParams.order;
+      let originSortFlag = originOrder.split(':')[0];
+      let originSortType = originOrder.split(':')[1];
+      // 默认排序是从高到底:"1:desc"
+      let newOrder = '';
+      if (originSortFlag == sortFlag) {
+        newOrder = `${originSortFlag}:${originSortType == 'asc' ? 'desc' : 'asc'}`
+      } else {
+        // 默认order排序是:'1:desc'
+        newOrder = `${sortFlag}:desc`
+      }
+      // 重新给order赋值
+      this.searchParams.order = newOrder;
+      //再次发送请求
       this.getSearchData(this.searchParams)
     }
   },
