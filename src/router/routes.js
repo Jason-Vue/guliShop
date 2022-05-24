@@ -33,8 +33,7 @@ export default [{
     name: 'search'
   },
   {
-    'path': '/detail',
+    'path': '/detail/:skuid',
     component: Detail,
-
   }
 ]

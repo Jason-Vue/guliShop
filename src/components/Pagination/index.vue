@@ -39,7 +39,6 @@
   4.pageNo:当前是第几页？父组件给
   5.continueNum:连续页码。父组件给
 二.除了总页数可以自己算出来，其余四项必须父组件给
-
 */
 export default {
   data () {
@@ -47,7 +46,30 @@ export default {
 
     }
   },
-  props: ['pageNo', 'total', 'pageSize', 'continueNum', 'totalPage'],
+  // props: ['pageNo', 'total', 'pageSize', 'continueNum', 'totalPage'],
+  // 这里props这样写是因为上面这些属性取不到里面的值，所以给它一个默认的值
+  props: {
+    pageNo: {
+      type: Number,
+      default: 1
+    },
+    total: {
+      type: Number,
+      default: 0
+    },
+    pageSize: {
+      type: Number,
+      default: 5
+    },
+    continueNum: {
+      type: Number,
+      default: 5
+    },
+    totalPage: {
+      type: Number,
+      default: 0
+    }
+  },
   computed: {
     // 1.总共页码数(其实后台已经给了totalPage的接口数据，不用我们自己在这里算出来)
     // totalPage () {
@@ -56,7 +78,7 @@ export default {
     // 2.计算continueNum的起始和结束
     startAndEnd () {
       let { pageNo, continueNum, totalPage } = this;
-      console.log("当前页码" + pageNo, '连续页' + continueNum);
+      // console.log("当前页码" + pageNo, '连续页' + continueNum);
       let start = 0, end = 0;
       start = pageNo - Math.floor(continueNum / 2);
       end = pageNo + Math.floor(continueNum / 2);
@@ -71,18 +93,16 @@ export default {
         end = pageNo + Math.floor(continueNum / 2);
         // 2.2 当起始页码小于等于一时
         if (start <= 1) {
-          console.log('我走了');
           start = 1;
           end = continueNum
         }
         // 2.3 当结束页码大于等于totalPage时
         if (end >= totalPage) {
-          console.log('我也走了');
           end = totalPage;
           start = totalPage - continueNum + 1
         }
       }
-      console.log(start, end);
+      // console.log(start, end);
       return { start, end }
     }
   },
@@ -93,7 +113,7 @@ export default {
     }
   },
   mounted () {
-
+    // console.log("mounted当前页码是", this.pageNo, this.continueNum, this.total, this.pageSize, this.totalPage);
   }
 }
 </script>

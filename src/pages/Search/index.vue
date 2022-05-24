@@ -66,8 +66,7 @@
                   :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html"
-                       target="_blank"><img :src="goods.defaultImg" /></a>
+                    <router-link :to="`/detail/${goods.id}`"><img :src="goods.defaultImg" /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -209,7 +208,7 @@ export default {
         // 当前页面
         "pageNo": 1,
         // 每页数据条数
-        "pageSize": 10,
+        "pageSize": 5,
         "props": [],
         "trademark": ""
       }
@@ -229,7 +228,6 @@ export default {
     }),
     //1.商品排序是否是综合排序
     isOne () {
-      // console.log(this.searchParams.order.split(':')[0] == 1);
       return this.searchParams.order.split(':')[0] == 1
     },
     isTwo () {
