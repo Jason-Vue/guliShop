@@ -7,7 +7,14 @@ Vue.use(Router)
 
 
 const router = new Router({
-  routes: routes
+  routes: routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 始终滚动到顶部
+    return {
+      x: 0,
+      y: 0
+    }
+  },
 })
 
 export default router

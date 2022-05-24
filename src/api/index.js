@@ -27,3 +27,11 @@ export const reqSearchList = (params) => {
     data: params || {}
   })
 }
+
+// 5.请求详情页的Detail数据
+export const reqDetailList = (skuId) => {
+  return axios({
+    method: 'get',
+    url: `/item/${ skuId }`
+  })
+}
