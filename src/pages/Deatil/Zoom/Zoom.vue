@@ -5,7 +5,8 @@
     -->
     <img :src="imgObj.imgUrl" />
     <!-- <img :src="defaultImg.imgUrl" /> -->
-    <div class="event"></div>
+    <div class="event"
+         @mousemove="move"></div>
     <div class="big">
       <img :src="imgObj.imgUrl"
            ref="bigImg" />
@@ -35,18 +36,16 @@ export default {
   mounted () {
     //小图组件给zoom传递index，需要使用全局事件总线
     this.$bus.$on('changeDefaultIndex', (index) => {
-      console.log(index);
+      // 根据设置的下标计算图片
+      this.defaultIndex = index
+      return this.skuImageList[this.defaultIndex] || {}
     })
   },
   computed: {
     // 1.为了解决父组件传过来的skuImageList可能是个空数组，对它进行加工下，给它如果是个空数组的话就是空对象
     imgObj () {
-      return this.skuImageList[0] || {}
+      return this.skuImageList[this.defaultIndex] || {}
     },
-    // 根据设置的下标计算图片
-    // defaultImg () {
-    //   return this.skuImageList[this.defaultIndex] || {}
-    // }
   },
   methods: {
     // 小图组件传递过来的index，需要改变当前的defaultIndex
@@ -55,7 +54,7 @@ export default {
     //   this.defaultIndex = index
     // },
 
-    /* move (event) {
+    move (event) {
       //鼠标动，蒙版动  想办法去让蒙版跟着动
       // 转化为根据鼠标的位置求蒙版的位置
       // event.clientX    相对视口左上角，视口是不变的    
@@ -92,7 +91,7 @@ export default {
       //蒙版动  大图动   大图刚好移动蒙版反向2倍
       bigImg.style.left = -2 * maskX + 'px'
       bigImg.style.top = -2 * maskY + 'px'
-    } */
+    }
   }
 }
 </script>
