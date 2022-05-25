@@ -55,8 +55,8 @@ export default {
         this.$nextTick(() => {
           new Swiper(this.$refs.imgSwiper, {
 
-            slidesPerView: 2,   //一个视图放几张
-            slidesPerGroup: 2,  //切换一组，几张图片
+            slidesPerView: 3,   //一个视图放几张
+            slidesPerGroup: 3,  //切换一组，几张图片
 
             // 如果需要前进后退按钮
             navigation: {
