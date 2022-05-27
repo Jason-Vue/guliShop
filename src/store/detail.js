@@ -1,10 +1,17 @@
+// 封装临时游客身份
+import {
+  getUUID
+} from "@/utils/uuid_token"
+
 import {
   reqDetailList,
   reqAddOrUpdateShopCart
 } from "@/api/index"
 
 const state = {
-  detailList: {}
+  detailList: {},
+  //临时游客身份
+  uuid_token: getUUID()
 };
 
 const mutations = {
@@ -34,7 +41,7 @@ const actions = {
     const result = await reqAddOrUpdateShopCart(parseInt(skuId), parseInt(skuNum));
     // console.log(result);
     // async返回的一定是一个Promise(要么成功，要么失败)
-    if (result.code == 201) {
+    if (result.code == 200) {
       return "加入购物车ok"
     } else {
       return Promise.reject(new Error("加入购物车fail"))
