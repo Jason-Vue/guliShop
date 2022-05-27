@@ -46,3 +46,13 @@ export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
     method: "post"
   })
 }
+
+
+// 7.获取购物车数据接口
+// /api/cart/cartList   get
+export const reqCartList = () => {
+  return axios({
+    url: "/cart/cartList",
+    method: 'get'
+  })
+}

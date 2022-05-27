@@ -370,11 +370,12 @@
 import { mapGetters } from "vuex"
 import ImageList from "./ImageList/ImageList.vue"
 import Zoom from "./Zoom/Zoom.vue"
+
 export default {
   data () {
     return {
       // 购物车库存件数
-      skuNum: 1
+      skuNum: 1,
     }
   },
   components: {
