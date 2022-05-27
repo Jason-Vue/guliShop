@@ -64,28 +64,7 @@
               </div>
             </div>
           </div>
-          <!-- 
-          <div class="choose">
-            <div class="chooseArea">
-              <div class="choosed"></div>
-            </div>
 
-            <div class="cartWrap">
-              <div class="controls">
-                <input autocomplete="off"
-                       value="1"
-                       class="itxt" />
-                <a href="###"
-                   class="plus">+</a>
-                <a href="###"
-                   class="mins">-</a>
-              </div>
-              <div class="add">
-                <a href="###"
-                   target="_blank">加入购物车</a>
-              </div>
-            </div>
-          </div> -->
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
@@ -109,16 +88,16 @@
                 输入框的change事件内部包含了失去焦点事件，当用户失去焦点的时候，也会选择性触发change事件
                 触发这个事件的前提是当前这个数据，必须和之前的数据不一样，才能触发。否则不触发
                 -->
-                <!-- <input autocomplete="off"
+                <input autocomplete="off"
                        class="itxt"
                        v-model="skuNum"
-                       @change="$event.target.value>=1?skuNum=$event.target.value:skuNum=1" />
+                       @change="skuNumChange" />
                 <a href="###"
                    class="plus"
                    @click="skuNum++">+</a>
                 <a href="###"
                    class="mins"
-                   @click="skuNum<=1?skuNum=skuNum:skuNum--">-</a> -->
+                   @click="skuNum<=1?skuNum=1:skuNum--">-</a>
               </div>
               <div class="add">
                 <!-- 之前我们的跳转几乎都是点击直接跳转，因为我们在跳转之前不需要发请求
@@ -127,8 +106,7 @@
                 而加入购物车不一样，当我们点击添加购物车的时候，我们得需要先发请求给后台，后台需要把这个
                 购物车信息存储数据库，请求成功之后，会返回给我们信息。我们根据这个信息再去跳转
                 否则，有可能后台添加数据库失败，而我们已经跳到下个页面，就出问题-->
-                <a href="###"
-                   target="_blank">加入购物车</a>
+                <a @click="addOrUpdateShopCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -395,7 +373,8 @@ import Zoom from "./Zoom/Zoom.vue"
 export default {
   data () {
     return {
-
+      // 购物车库存件数
+      skuNum: 1
     }
   },
   components: {
@@ -424,7 +403,49 @@ export default {
       // 只有点击的那个选项才选中
       // console.log(spuSaleAttr.spuSaleAttrValueList[index], index);
       spuSaleAttr.spuSaleAttrValueList[index].isChecked = '1'
+    },
+    // 2.skuNum库存件数改变事件
+    skuNumChange ($event) {
+      // $event.target.value >= 1 ? skuNum = $event.target.value : skuNum = 1
+      // "1我爱你" * 1 是NaN 
+      let value = $event.target.value * 1
+      // value是字符串或者小于1
+      if (isNaN(value) || value < 1) {
+        this.skuNum = 1
+      } else {
+        // 正常大于一：但是可能是个小数
+        this.skuNum = parseInt(value)
+      }
+    },
+    //3.点击或者更新购物车事件
+    async addOrUpdateShopCart () {
+      /* 
+      1.发请求--将产品加入到数据库
+      2.服务器存储成功---路由跳转
+      3.失败，给用户进行提示
+      */
+      //  一.再点击加入购物车之前，做的第一件事情：就是将参数带给服务器(发请求),通知服务器加入购物车的产品是谁
+      // await this.$store.dispatch("addOrUpdateShopCart", { skuNum: this.skuNum, skuId: this.$route.params.skuid })
+      // 二.你需要知道这次请求是否成功还是失败，如果成功进行路由跳转，如果失败，需要给用户提示
+      try {
+        await this.$store.dispatch("addOrUpdateShopCart", { skuNum: this.skuNum, skuId: this.$route.params.skuid })
+        // 成功
+        // 三.路由跳转，路由传参
+        // 3.1 本来可以通过这种query的方式将需要的参数带过去，但是skuInfo是对象，它在地址栏里面的显示看不到参数
+        // 3.2 使用回话存储技术:一般存储的就是字符串
+        sessionStorage.setItem("SKUINFO", JSON.stringify(this.skuInfo))
+        this.$router.push({
+          name: 'addCartSuccess', query: {
+            skuNum: this.skuNum,
+            // skuInfo: this.skuInfo
+          }
+        })
+      } catch (error) {
+        // 失败
+        alert(error.message)
+      }
     }
+
   },
   //生命周期 - 创建完成（访问当前this实例）
   created () {

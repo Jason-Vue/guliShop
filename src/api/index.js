@@ -35,3 +35,14 @@ export const reqDetailList = (skuId) => {
     url: `/item/${ skuId }`
   })
 }
+
+
+// 6.详情页加入购物车的接口(购物车获取更新某一个产品的的个数)
+// /api/cart/addToCart/{ skuId }/{ skuNum }     post
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
+  // console.log(skuId, skuNum);
+  return axios({
+    url: `/cart/addToCart/${ skuId }/${ skuNum }`,
+    method: "post"
+  })
+}

@@ -20,3 +20,14 @@ import axios from "axios";
 // }).catch((err) => {
 //   console.log(err);
 // })
+
+
+// 测试加入购物车接口
+axios({
+  url: `http://gmall-h5-api.atguigu.cn/api/cart/addToCart/4/1`,
+  method: "post"
+}).then((res) => {
+  console.log(res.data);
+}).catch((err) => {
+  console.log(err);
+})
