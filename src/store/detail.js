@@ -1,5 +1,6 @@
 import {
-  reqDetailList
+  reqDetailList,
+  reqAddOrUpdateShopCart
 } from "@/api/index"
 
 const state = {
@@ -14,10 +15,29 @@ const mutations = {
 };
 
 const actions = {
+  // 1.获取详情页信息
   async getDetailList(context, skuid) {
     const result = await reqDetailList(skuid);
     if (result.code == 200) {
       context.commit("GETDETAILLIST", result.data);
+    }
+  },
+  // 2.详情页添加到购物车
+  async addOrUpdateShopCart({
+    commit
+  }, {
+    skuNum,
+    skuId
+  }) {
+    // console.log(skuNum, skuId);
+    // 加入购物车前端带一些数据给服务器【服务器存储一些数据】，不需要三连环，没有返回数据
+    const result = await reqAddOrUpdateShopCart(parseInt(skuId), parseInt(skuNum));
+    // console.log(result);
+    // async返回的一定是一个Promise(要么成功，要么失败)
+    if (result.code == 201) {
+      return "加入购物车ok"
+    } else {
+      return Promise.reject(new Error("加入购物车fail"))
     }
   }
 };
