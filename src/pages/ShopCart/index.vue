@@ -14,120 +14,55 @@
         </div>
         <div class="cart-body">
 
-          <ul class="cart-list">
-            <li class="cart-list-con1">
-              <input type="checkbox"
-                     name="chk_list">
-            </li>
-            <li class="cart-list-con2">
-              <img src="./images/goods1.png">
-              <div class="item-msg">米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强</div>
-            </li>
-
-            <li class="cart-list-con4">
-              <span class="price">399.00</span>
-            </li>
-            <li class="cart-list-con5">
-              <a href="javascript:void(0)"
-                 class="mins">-</a>
-              <input autocomplete="off"
-                     type="text"
-                     value="1"
-                     minnum="1"
-                     class="itxt">
-              <a href="javascript:void(0)"
-                 class="plus">+</a>
-            </li>
-            <li class="cart-list-con6">
-              <span class="sum">399</span>
-            </li>
-            <li class="cart-list-con7">
-              <a href="#none"
-                 class="sindelet">删除</a>
-              <br>
-              <a href="#none">移到收藏</a>
-            </li>
-          </ul>
-
-          <ul class="cart-list">
+          <ul class="cart-list"
+              v-for="(cart,index) in cartInfoList"
+              :key="cart.id">
             <li class="cart-list-con1">
               <input type="checkbox"
                      name="chk_list"
-                     id=""
-                     value="">
+                     :checked="cart.isChecked==1"
+                     @change="updateCheck(cart,$event)">
             </li>
             <li class="cart-list-con2">
-              <img src="./images/goods2.png">
-              <div class="item-msg">华为（MIJIA） 华为metaPRO 30 浴霸4摄像 超清晰</div>
+              <img :src="cart.imgUrl">
+              <div class="item-msg">{{cart.skuName}}</div>
             </li>
 
             <li class="cart-list-con4">
-              <span class="price">5622.00</span>
+              <span class="price">{{cart.cartPrice}}.00</span>
             </li>
             <li class="cart-list-con5">
               <a href="javascript:void(0)"
-                 class="mins">-</a>
+                 class="mins"
+                 @click="handler('minus',-1,cart)">-</a>
               <input autocomplete="off"
                      type="text"
-                     value="1"
+                     :value="cart.skuNum"
                      minnum="1"
-                     class="itxt">
+                     class="itxt"
+                     @change="handler('change',$event.target.value*1,cart)">
               <a href="javascript:void(0)"
-                 class="plus">+</a>
+                 class="plus"
+                 @click="handler('add',1,cart)">+</a>
             </li>
             <li class="cart-list-con6">
-              <span class="sum">5622</span>
+              <span class="sum">{{cart.skuNum*cart.cartPrice}}</span>
             </li>
             <li class="cart-list-con7">
-              <a href="#none"
-                 class="sindelet">删除</a>
+              <a class="sindelet"
+                 @click="deleteShopList(cart)">删除</a>
               <br>
               <a href="#none">移到收藏</a>
             </li>
           </ul>
 
-          <ul class="cart-list">
-            <li class="cart-list-con1">
-              <input type="checkbox"
-                     name="chk_list"
-                     id=""
-                     value="">
-            </li>
-            <li class="cart-list-con2">
-              <img src="./images/goods3.png">
-              <div class="item-msg">iphone 11 max PRO 苹果四摄 超清晰 超费电 超及好用</div>
-            </li>
-
-            <li class="cart-list-con4">
-              <span class="price">11399.00</span>
-            </li>
-            <li class="cart-list-con5">
-              <a href="javascript:void(0)"
-                 class="mins">-</a>
-              <input autocomplete="off"
-                     type="text"
-                     value="1"
-                     minnum="1"
-                     class="itxt">
-              <a href="javascript:void(0)"
-                 class="plus">+</a>
-            </li>
-            <li class="cart-list-con6">
-              <span class="sum">11399</span>
-            </li>
-            <li class="cart-list-con7">
-              <a href="#none"
-                 class="sindelet">删除</a>
-              <br>
-              <a href="#none">移到收藏</a>
-            </li>
-          </ul>
         </div>
       </div>
       <div class="cart-tool">
         <div class="select-all">
           <input class="chooseAll"
-                 type="checkbox">
+                 type="checkbox"
+                 :checked="isAllChecked">
           <span>全选</span>
         </div>
         <div class="option">
@@ -140,8 +75,8 @@
             <span>0</span>件商品
           </div>
           <div class="sumprice">
-            <em>总价（不含运费） ：</em>
-            <i class="summoney">0</i>
+            <em>总价（不含运费):</em>
+            <i class="summoney">{{totalPrice}}</i>
           </div>
           <div class="sumbtn">
             <a class="sum-btn"
@@ -155,10 +90,150 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex"
+import throttle from 'lodash/throttle'
 export default {
   data () {
     return {
 
+    }
+  },
+  computed: {
+    ...mapGetters(['cartList']),
+    // 1.返回cartInfoList，处理下返回数组
+    cartInfoList () {
+      return this.cartList.cartInfoList || []
+    },
+    // 2.计算商品的总价
+    totalPrice () {
+      // 也可以使用数组reduce方法
+      let sum = 0;
+      this.cartInfoList.forEach(cart => {
+        sum += cart.skuNum * cart.cartPrice
+      });
+      return sum
+    },
+    // 3.判断多选框是否全部勾选或者不勾
+    isAllChecked () {
+      // 遍历全部的数组里面的元素的isChecked属性都是1==>返回true;只要有一个不为1,返回false
+      return this.cartInfoList.every((item) => {
+        return item.isChecked == 1
+      })
+    }
+  },
+  methods: {
+    // 1.获取购物车数据
+    getShopData () {
+      this.$store.dispatch("getShopCartList");
+    },
+    // 2.处理购物车里的商品数量增加或减少事件
+    handler: throttle(async function (type, disNum, cart) {
+      // type:为了区分三个元素
+      // disNum:目前disNum形参代表: +(变化量),-(变化量),input传入的量(并不是变化量)
+      // cart:哪一个产品身上有ID
+      // console.log(type, disNum, cart);
+      // 2.1 向服务器发送请求，修改数量
+      switch (type) {
+        case "add":
+          disNum = 1;
+          break;
+        case "minus":
+          // 如果购物车里的商品数量大于一,disNum为1;如果是小于等于一，disNum为0(原封不动)
+          // if (cart.skuNum > 1) {
+          //   disNum = -1;
+          // } else {
+          //   disNum = 0
+          // }
+          disNum = cart.skuNum > 1 ? -1 : 0
+          break;
+        case "change":
+          // 如果传过来的数值是非法的，或者disNum<0;那么disNum就是0,不变化
+          if (isNaN(disNum) || disNum < 1) {
+            disNum = 0
+          } else {
+            // 传过来的disNum是正数，但是有可能是小数，所以需要处理下
+            // disNum应该是传过来的数值减去数据库里面的skuNum才是最终的值
+            disNum = parseInt(disNum) - cart.skuNum
+          }
+          break;
+      }
+      // 2.2 派发actions
+      try {
+        // 2.3 代表修改成功
+        const result = await this.$store.dispatch("addOrUpdateShopCart", { skuId: cart.skuId, skuNum: disNum });
+        // console.log(result);
+        // 2.4 再一次获取服务器最新的数据进行展示
+        this.getShopData()
+      } catch (error) {
+        alert(error.message)
+      }
+    }, 1000),
+    // async handler (type, disNum, cart) {
+    //   // type:为了区分三个元素
+    //   // disNum:目前disNum形参代表: +(变化量),-(变化量),input传入的量(并不是变化量)
+    //   // cart:哪一个产品身上有ID
+    //   // console.log(type, disNum, cart);
+    //   // 2.1 向服务器发送请求，修改数量
+    //   switch (type) {
+    //     case "add":
+    //       disNum = 1;
+    //       break;
+    //     case "minus":
+    //       // 如果购物车里的商品数量大于一,disNum为1;如果是小于等于一，disNum为0(原封不动)
+    //       // if (cart.skuNum > 1) {
+    //       //   disNum = -1;
+    //       // } else {
+    //       //   disNum = 0
+    //       // }
+    //       disNum = cart.skuNum > 1 ? -1 : 0
+    //       break;
+    //     case "change":
+    //       // 如果传过来的数值是非法的，或者disNum<0;那么disNum就是0,不变化
+    //       if (isNaN(disNum) || disNum < 1) {
+    //         disNum = 0
+    //       } else {
+    //         // 传过来的disNum是正数，但是有可能是小数，所以需要处理下
+    //         // disNum应该是传过来的数值减去数据库里面的skuNum才是最终的值
+    //         disNum = parseInt(disNum) - cart.skuNum
+    //       }
+    //       break;
+    //   }
+    //   // 2.2 派发actions
+    //   try {
+    //     // 2.3 代表修改成功
+    //     const result = await this.$store.dispatch("addOrUpdateShopCart", { skuId: cart.skuId, skuNum: disNum });
+    //     // console.log(result);
+    //     // 2.4 再一次获取服务器最新的数据进行展示
+    //     this.getShopData()
+    //   } catch (error) {
+    //     alert(error.message)
+    //   }
+    // },
+    // 3.删除购物车数据
+    async deleteShopList (cart) {
+      try {
+        // 如果请求成功，再次发请求
+        // 这里删除的是skuId不是id，别搞错了
+        const result = await this.$store.dispatch("deleteShopList", cart.skuId);
+        // console.log(result);
+        this.getShopData()
+      } catch (error) {
+        // 请求失败
+        alert(error.message)
+      }
+    },
+    // 5.修改购物车选中状态
+    async updateCheck (cart, event) {
+      try {
+        // console.log(cart, event.target.checked);
+        // 因为isChecked带给服务器的是字符串1或者0
+        let isChecked = event.target.checked ? "1" : "0"
+        const result = await this.$store.dispatch("updateCheckedById", { skuId: cart.skuId, isChecked: isChecked });
+        // 请求成功，再次请求数据
+        this.getShopData()
+      } catch (error) {
+        alert(error.message)
+      }
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
@@ -167,7 +242,7 @@ export default {
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted () {
-    this.$store.dispatch("getShopCartList")
+    this.getShopData()
   }
 }
 </script>

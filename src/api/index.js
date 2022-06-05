@@ -56,3 +56,22 @@ export const reqCartList = () => {
     method: 'get'
   })
 }
+
+
+// 8.删除一条购物车的数据 
+// /api/cart/deleteCart/{skuId}  delete
+export const reqDeleteShopById = (skuId) => {
+  return axios({
+    method: 'delete',
+    url: `/cart/deleteCart/${skuId}`
+  })
+}
+
+// 9.修改购物车选中状态
+// /api/cart/checkCart/{skuID}/{isChecked}
+export const reqUpdateCheckedById = (skuID, isChecked) => {
+  return axios({
+    method: 'get',
+    url: `cart/checkCart/${skuID}/${isChecked}`
+  })
+}
