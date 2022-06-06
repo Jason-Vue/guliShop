@@ -62,11 +62,12 @@
         <div class="select-all">
           <input class="chooseAll"
                  type="checkbox"
-                 :checked="isAllChecked">
+                 :checked="isAllChecked&&cartInfoList.length>0"
+                 @change="checkAll">
           <span>全选</span>
         </div>
         <div class="option">
-          <a href="#none">删除选中的商品</a>
+          <a @click="deleteCheckAll">删除选中的商品</a>
           <a href="#none">移到我的关注</a>
           <a href="#none">清除下柜商品</a>
         </div>
@@ -222,7 +223,7 @@ export default {
         alert(error.message)
       }
     },
-    // 5.修改购物车选中状态
+    // 4.修改购物车选中状态
     async updateCheck (cart, event) {
       try {
         // console.log(cart, event.target.checked);
@@ -234,7 +235,26 @@ export default {
       } catch (error) {
         alert(error.message)
       }
+    },
+    // 6.删除多个购物车数据
+    async deleteCheckAll () {
+      try {
+        await this.$store.dispatch("deleteAllCheckedCart")
+        this.getShopData()
+      } catch (error) {
+        alert(error.message)
+      }
+    },
+    // 7.购物车全选
+    async checkAll (event) {
+      try {
+        await this.$store.dispatch("checkAll", event.target.checked);
+        this.getShopData()
+      } catch (error) {
+        alert(error.message)
+      }
     }
+
   },
   //生命周期 - 创建完成（访问当前this实例）
   created () {
