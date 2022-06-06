@@ -75,3 +75,22 @@ export const reqUpdateCheckedById = (skuID, isChecked) => {
     url: `cart/checkCart/${skuID}/${isChecked}`
   })
 }
+
+
+// 10.注册获取验证码
+// /api/user/passport/sendCode/{phone}    get
+export const reqRegisterPhoneCode = (phone) => axios({
+  method: 'get',
+  url: `/user/passport/sendCode/${phone}`
+})
+
+// 11.注册用户
+// /api/user/passport/register    post     
+// phone
+// password
+// code
+export const reqRegister = (user) => axios({
+  method: 'post',
+  url: '/user/passport/register',
+  data: user
+})

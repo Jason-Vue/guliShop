@@ -1,6 +1,6 @@
 import Home from "@/pages/Home"
 import Login from "@/pages/Login"
-import Detail from "@/pages/Deatil"
+import Detail from "@/pages/Detail"
 import Search from "@/pages/Search"
 import Register from "@/pages/Register"
 import AddCartSuccess from "@/pages/AddCartSuccess"
