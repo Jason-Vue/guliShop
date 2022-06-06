@@ -46,6 +46,33 @@ const actions = {
     } else {
       return Promise.reject(new Error('购物车修改某一商品的选中状态失败'))
     }
+  },
+  // 4.删除全部勾选的商品
+  deleteAllCheckedCart({
+    dispatch,
+    getters
+  }) {
+    let promiseAll = [];
+    getters.cartList.cartInfoList.forEach(item => {
+      let promise = item.isChecked == 1 ? dispatch("deleteShopList", item.skuId) : ''
+      // 将每一次返回的promise结果放进数组里
+      promiseAll.push(promise)
+    });
+    // 只要全部的p1|p2...都成功，返回结果就是成功，只要有一个失败就是失败
+    return Promise.all(promiseAll)
+  },
+  // 5.购物车全选事件
+  checkAll(context, isChecked) {
+    isChecked = isChecked == true ? '1' : '0';
+    let promiseAll = [];
+    context.getters.cartList.cartInfoList.forEach((item) => {
+      let promise = context.dispatch("updateCheckedById", {
+        skuId: item.skuId,
+        isChecked: isChecked
+      })
+      promiseAll.push(promise)
+    })
+    return Promise.all(promiseAll)
   }
 }
 
