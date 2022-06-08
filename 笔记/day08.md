@@ -40,4 +40,23 @@
    守卫：防护
    比如：问题二:我们已经登录了，但是现在我们还是可以去到登录页，这不符合逻辑
 
-   
+分类:  (应用开发中基本都是用前置守卫)
+	全局守卫
+		前置: 监视任意路由跳转, 在准备跳转到目标路由时回调
+			router.beforeEach((to, from, next) => {})
+				to: 目标路由对象
+				from: 当前路由对象  对应的就$route
+				next: 控制路由跳转的函数
+				  不执行: 不放行, 不会跳转到目标路由
+				  next(): 放行, 请求的路由组件才能显示
+				  next(path): 强制跳转到指定路由去
+		后置: 监视任意路由跳转, 在已经跳转到目标路由时才调用
+	路由守卫
+		前置: 监视是跳转到当前路由, 当准备跳转时回调
+			beforeEnter: (to, from, next) => { }
+	组件守卫
+		前置: 与路由前置守卫功能类似
+			beforeRouteEnter (to, from, next) {},
+				next((component) => {}) // 指定回调函数在组件对象创建之后执行
+		更新: beforeRouteUpdate (to, from, next) 
+		离开: beforeRouteLeave (to, from, next)

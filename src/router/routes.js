@@ -5,6 +5,7 @@ import Search from "@/pages/Search"
 import Register from "@/pages/Register"
 import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from "@/pages/ShopCart"
+import Trade from "@/pages/Trade"
 
 
 export default [{
@@ -46,5 +47,9 @@ export default [{
   {
     'path': '/shopCart',
     component: ShopCart
+  },
+  {
+    'path': "/trade",
+    component: Trade
   }
 ]
