@@ -17,19 +17,20 @@
           </ul>
 
           <div class="content">
-            <form action="##">
-
+            <form action="">
               <div class="input-text clearFix">
                 <i></i>
                 <input type="text"
-                       placeholder="手机号">
+                       placeholder="手机号"
+                       v-model="phone">
                 <span class="error-msg">错误提示信息</span>
               </div>
 
               <div class="input-text clearFix">
                 <i class="pwd"></i>
                 <input type="text"
-                       placeholder="请输入密码">
+                       placeholder="请输入密码"
+                       v-model="password">
                 <span class="error-msg">错误提示信息</span>
               </div>
 
@@ -43,8 +44,8 @@
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
-
+              <button class="btn"
+                      @click.prevent="userLogin">登&nbsp;&nbsp;录</button>
             </form>
             <div class="call clearFix">
               <ul>
@@ -88,7 +89,21 @@
 export default {
   data () {
     return {
-
+      password: '',
+      phone: ''
+    }
+  },
+  methods: {
+    // 1.用户登录
+    async userLogin () {
+      let { password, phone } = this;
+      try {
+        (password && phone) && await this.$store.dispatch("userLogin", { password, phone });
+        // 登录成功,跳转到首页
+        this.$router.push('/home')
+      } catch (error) {
+        alert(error.message)
+      }
     }
   },
   //生命周期 - 创建完成（访问当前this实例）

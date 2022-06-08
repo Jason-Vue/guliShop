@@ -8,7 +8,8 @@
         <div class="container">
           <div class="loginList">
             <p>尚品汇欢迎您！</p>
-            <p>
+            <!-- 没有登录 -->
+            <p v-if="!userName">
               <span>请</span>
               <!-- <a href="###">登录</a>
               <a href="###"
@@ -16,6 +17,12 @@
               <router-link to="/login">登录</router-link>
               <router-link to="/register"
                            class="register">免费注册</router-link>
+            </p>
+            <!-- 已经登录 -->
+            <p v-else>
+              <a>{{userName}}</a>
+              <a class="register"
+                 @click="logOut">退出登录</a>
             </p>
           </div>
           <div class="typeList">
@@ -65,6 +72,11 @@ export default {
       kw: ''
     }
   },
+  computed: {
+    userName () {
+      return this.$store.state.UserAbout.userInfo.name
+    }
+  },
   methods: {
     // 1.搜索页面
     goSearch () {
@@ -81,6 +93,19 @@ export default {
       // 编程式导航
       console.log(location);
       this.$router.push(location)
+    },
+    // 2.退出登录
+    async logOut () {
+      /* 退出登录逻辑：
+      1. 通知后端服务器退出登录(清除一些数据)
+      2. 清除项目中的一些信息[userInfo, token] */
+      try {
+        await this.$store.dispatch("UserLogOut")
+        // 如果退出成功，应该回到首页
+        this.$router.push("/home")
+      } catch (error) {
+        alert(error.message)
+      }
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
@@ -96,7 +121,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-/* @import url(); 引入css类 */
 .header {
   & > .top {
     background-color: #eaeaea;

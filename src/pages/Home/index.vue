@@ -48,10 +48,12 @@ export default {
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted () {
-    this.$store.dispatch('getFloorList')
+    // 获取首页楼层信息
+    this.$store.dispatch('getFloorList');
+    // 派发获取用户信息
+    this.$store.dispatch("getUserInfo")
   }
 }
 </script>
 <style scoped>
-/* @import url(); 引入css类 */
 </style>

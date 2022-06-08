@@ -16,6 +16,10 @@ instance.interceptors.request.use((config) => {
     // 在请求头里添加一个字段:(userTempId),和后台老师商量好的，不能随便乱加
     config.headers.userTempId = store.state.DetailAbout.uuid_token
   }
+  // 需要携带token带给服务器
+  if (store.state.UserAbout.token) {
+    config.headers.token = store.state.UserAbout.token
+  }
   nprogress.start()
   return config
 }, (error) => {

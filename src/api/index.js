@@ -94,3 +94,35 @@ export const reqRegister = (user) => axios({
   url: '/user/passport/register',
   data: user
 })
+
+
+// 12.用户登录
+// /api/user/passport/login   post
+// phone
+// password
+export const reqUserLogin = (data) => axios({
+  method: 'post',
+  url: '/user/passport/login',
+  data: data
+})
+
+
+// 13.获取用户信息
+// 修改的：
+// 添加了token校验获取用户登录信息， 用户登录只保存用户的token
+// token校验
+// http: //182.92.128.115/api/user/passport/auth/getUserInfo
+export const reqUserInfo = () => axios({
+  method: 'get',
+  url: 'user/passport/auth/getUserInfo'
+})
+
+
+// 14.退出登录
+// /api/user/passport/logout   get
+export const reqLoginOut = () => {
+  return axios({
+    method: 'get',
+    url: '/user/passport/logout'
+  })
+}
