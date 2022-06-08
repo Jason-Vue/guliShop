@@ -92,11 +92,9 @@
                        class="itxt"
                        v-model="skuNum"
                        @change="skuNumChange" />
-                <a href="###"
-                   class="plus"
+                <a class="plus"
                    @click="skuNum++">+</a>
-                <a href="###"
-                   class="mins"
+                <a class="mins"
                    @click="skuNum<=1?skuNum=1:skuNum--">-</a>
               </div>
               <div class="add">

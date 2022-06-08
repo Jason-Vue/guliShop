@@ -66,10 +66,9 @@ const actions = {
     if (result.code == 200) {
       commit("GETUSERINFO", result.data)
       return "获取用户信息成功"
+    } else {
+      return Promise.reject(new Error('获取用户信息失败'))
     }
-    // else {
-    //   return Promise.reject(new Error('获取用户信息失败'))
-    // }
   },
   // 5.退出登录
   async UserLogOut({
