@@ -126,3 +126,18 @@ export const reqLoginOut = () => {
     url: '/user/passport/logout'
   })
 }
+
+// 15.获取用户地址信息
+// /api/user/userAddress/auth/findUserAddressList
+//get
+export const reqAddressInfo=()=>axios({
+  method:'get',
+  url:'/user/userAddress/auth/findUserAddressList'
+})
+
+// 16.获取商品清单
+// /api/order/auth/trade   get
+export const reqOrderInfo=()=>axios({
+  method:'get',
+  url:'order/auth/trade'
+})

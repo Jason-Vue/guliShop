@@ -5,6 +5,7 @@ import SearchAbout from "./search"
 import DetailAbout from "./detail"
 import ShopCartAbout from "./shopCart"
 import UserAbout from "./user"
+import TradeAbout from "./trade"
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
     SearchAbout,
     DetailAbout,
     ShopCartAbout,
-    UserAbout
+    UserAbout,
+    TradeAbout
   }
 })
 
