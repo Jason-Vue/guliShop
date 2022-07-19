@@ -4,6 +4,10 @@ import App from './App.vue'
 import router from "@/router/index"
 import store from "@/store/index.js"
 
+// 引入element-ui
+import "@/utils/element"
+
+
 // 全局组件
 import NavType from "@/components/NavType"
 import Pagination from "@/components/Pagination"
@@ -15,8 +19,10 @@ import "@/mock/mockServer"
 // 引入首页轮播图样式
 import "swiper/css/swiper.css"
 
-// import "@/api/test"
+// 统一接口API文件夹里面的全部请求函数
+import * as API from "@/api/index.js"
 
+// import "@/api/test"
 // import {
 //   reqSearchList
 // } from "@/api/index"
@@ -29,6 +35,7 @@ new Vue({
   router: router,
   store: store,
   beforeCreate() {
-    Vue.prototype.$bus = this
+    Vue.prototype.$bus = this;
+    Vue.prototype.$API=API
   }
 }).$mount('#app')
