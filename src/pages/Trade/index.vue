@@ -103,7 +103,8 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <a href="##" class="subBtn">提交订单</a>
+      <a class="subBtn" @click="submitOrder">提交订单</a>
+      <!-- <router-link  class="subBtn" to="/pay">提交订单</router-link> -->
     </div>
   </div>
 </template>
@@ -115,6 +116,8 @@ export default {
     return {
       // 手机买家的留言信息
       msg: "",
+      // 订单ID
+      orderId: "",
     };
   },
   computed: {
@@ -136,6 +139,37 @@ export default {
       });
       //1.2 你点的那个才为一
       address.isDefault = 1;
+    },
+    // 2.提交订单
+    async submitOrder() {
+      // 1.参数
+      // 1.1 tradeNo：交易编码
+      let { tradeNo } = this.orderInfo;
+      // 1.2 整理其余留个参数
+      let data = {
+        // 购买用户
+        consignee: this.orderInfo.consignee,
+        // 电话号码
+        consigneeTel: this.orderInfo.phoneNum,
+        // 地址
+        deliveryAddress: this.orderInfo.fullAddress,
+        // 购买方式
+        paymentWay: "ONLINE",
+        // 用户留言
+        orderComment: this.msg,
+        // 购买商品详情列表
+        orderDetailList: this.orderInfo.detailArrayList,
+      };
+      // 2.整理需要携带的参数
+      const result = await this.$API.reqSubmitOrder(tradeNo, data);
+      if (result.code == 200) {
+        this.orderId = result.data;
+        // 3.路由跳转+路由跳转传参
+        // 3.1 query的方式传参
+        this.$router.push("/pay?orderId=" + this.orderId);
+      } else {
+        alert(result.data);
+      }
     },
   },
   //生命周期 - 创建完成（访问当前this实例）

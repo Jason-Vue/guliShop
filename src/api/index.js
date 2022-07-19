@@ -32,7 +32,7 @@ export const reqSearchList = (params) => {
 export const reqDetailList = (skuId) => {
   return axios({
     method: 'get',
-    url: `/item/${ skuId }`
+    url: `/item/${skuId}`
   })
 }
 
@@ -42,7 +42,7 @@ export const reqDetailList = (skuId) => {
 export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
   // console.log(skuId, skuNum);
   return axios({
-    url: `/cart/addToCart/${ skuId }/${ skuNum }`,
+    url: `/cart/addToCart/${skuId}/${skuNum}`,
     method: "post"
   })
 }
@@ -130,14 +130,39 @@ export const reqLoginOut = () => {
 // 15.获取用户地址信息
 // /api/user/userAddress/auth/findUserAddressList
 //get
-export const reqAddressInfo=()=>axios({
-  method:'get',
-  url:'/user/userAddress/auth/findUserAddressList'
+export const reqAddressInfo = () => axios({
+  method: 'get',
+  url: '/user/userAddress/auth/findUserAddressList'
 })
 
 // 16.获取商品清单
 // /api/order/auth/trade   get
-export const reqOrderInfo=()=>axios({
-  method:'get',
-  url:'order/auth/trade'
+export const reqOrderInfo = () => axios({
+  method: 'get',
+  url: 'order/auth/trade'
 })
+
+
+// 17.提交订单的接口
+// /api/order/auth/submitOrder?tradeNo={tradeNo}  post
+export const reqSubmitOrder = (tradeNo, data) => axios({
+  method: 'post',
+  url: `/order/auth/submitOrder?tradeNo=${tradeNo}`,
+  data: data
+})
+
+
+// 18.获取订单支付信息
+// /api/payment/weixin/createNative/{orderId}  get
+export const reqPayInfo = (orderId) => axios({
+  method: 'get',
+  url: `payment/weixin/createNative/${orderId}`
+})
+
+// 19.获取支付信息状态
+// /api/payment/weixin/queryPayStatus/{orderId}   get
+export const reqPayStatus = (orderId) => axios({
+  method: 'get',
+  url: `payment/weixin/queryPayStatus/${orderId}`
+})
+
