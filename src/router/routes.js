@@ -8,6 +8,10 @@ import ShopCart from "@/pages/ShopCart"
 import Trade from "@/pages/Trade"
 import Pay from "@/pages/Pay"
 import Paysuccess from "@/pages/PaySuccess"
+import Center from "@/pages/Center"
+// 引入二级路由
+import GroupOrder from "@/pages/Center/GroupOrder";
+import MyOrder from "@/pages/Center/MyOrder";
 
 export default [{
   path: '/',
@@ -60,5 +64,23 @@ export default [{
 {
   'path': "/paysuccess",
   component: Paysuccess
+},
+{
+  'path': '/center',
+  component: Center,
+  children: [
+    {
+      'path': '/center',
+      redirect: '/center/myOrder'
+    },
+    {
+      'path': '/center/myOrder',
+      component: MyOrder
+    },
+    {
+      "path": '/center/groupOrder',
+      component: GroupOrder
+    }
+  ]
 }
 ]

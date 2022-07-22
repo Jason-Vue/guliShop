@@ -166,3 +166,12 @@ export const reqPayStatus = (orderId) => axios({
   url: `payment/weixin/queryPayStatus/${orderId}`
 })
 
+
+// 20.获取个人中心的订单列表
+// /api/order/auth/{page}/{limit}   get
+export const reqMyOrder = (page, limit) => {
+  return axios({
+    method: 'get',
+    url: `/order/auth/${page}/${limit}`
+  })
+}

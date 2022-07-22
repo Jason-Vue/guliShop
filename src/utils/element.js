@@ -6,11 +6,14 @@ import {
     Button,
     MessageBox,
     Alert,
-    Message
+    Message,
+    Pagination
 } from 'element-ui';
 
 Vue.use(Button)
+Vue.use(Pagination)
+
 
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
-Vue.prototype.$message=Message
+Vue.prototype.$message = Message

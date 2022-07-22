@@ -151,12 +151,12 @@ export default {
           } else {
             // 点击支付成功按钮
             // 开发人员可以将下面这行代码注释，逃避判断，节省一分钱
-            if (this.code == 200) {
+            // if (this.code == 200) {
               clearInterval(this.timer);
               this.timer = null;
               done();
               this.$router.push("/paysuccess");
-            }
+            // }
           }
         },
       });
