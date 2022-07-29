@@ -15,7 +15,28 @@
           </ul>
 
           <div class="content">
-            <form action="">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+              <el-form-item prop="phone">
+                <el-input prefix-icon="el-icon-phone" placeholder="手机号" v-model="ruleForm.phone"></el-input>
+              </el-form-item>
+
+              <el-form-item prop="password">
+                <el-input prefix-icon="el-icon-user" placeholder="请输入密码" v-model="ruleForm.password"></el-input>
+              </el-form-item>
+
+              <div class="setting clearFix">
+                <label class="checkbox inline">
+                  <input name="m1" type="checkbox" value="2" checked="">
+                  自动登录
+                </label>
+                <span class="forget">忘记密码？</span>
+              </div>
+
+              <el-button class="btn" @click.prevent="userLogin">登&nbsp;&nbsp;录</el-button>
+
+            </el-form>
+
+            <!-- <form>
               <div class="input-text clearFix">
                 <i></i>
                 <input type="text" placeholder="手机号" v-model="phone">
@@ -36,13 +57,14 @@
                 <span class="forget">忘记密码？</span>
               </div>
               <button class="btn" @click.prevent="userLogin">登&nbsp;&nbsp;录</button>
-            </form>
+            </form> -->
+
             <div class="call clearFix">
               <ul>
-                <li><img src="images/qq.png" alt=""></li>
+                <!-- <li><img src="images/qq.png" alt=""></li>
                 <li><img src="images/sina.png" alt=""></li>
                 <li><img src="images/ali.png" alt=""></li>
-                <li><img src="images/weixin.png" alt=""></li>
+                <li><img src="images/weixin.png" alt=""></li> -->
               </ul>
               <a href="##" class="register">立即注册</a>
             </div>
@@ -73,26 +95,57 @@
 <script>
 export default {
   data() {
+    // 定义手机号的自定义校验规则
+    const checkMobile = (rule, value, cb) => {
+      const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+      if (reg.test(value)) {
+        cb()
+      } else {
+        cb(new Error('手机号码格式不正确'))
+      }
+    }
     return {
-      password: '',
-      phone: ''
+      // password: '',
+      // phone: '',
+      ruleForm: {
+        password: '111111',
+        phone: '13700000000',
+      },
+      rules: {
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { validator: checkMobile, trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 15, message: '长度在 6到 15个字符', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
     // 1.用户登录
-    async userLogin() {
-      let { password, phone } = this;
-      try {
-        (password && phone) && await this.$store.dispatch("userLogin", { password, phone });
-        // 登录成功,跳转到首页
-        // this.$router.push('/home')
-        // 登录的组件:看其中是否包含query参数,有:调到query参数指定的路由,没有:调到home
-        console.log(this.$route.query.redirect);
-        let toPath = this.$route.query.redirect || '/home';
-        this.$router.push(toPath)
-      } catch (error) {
-        alert(error.message)
-      }
+    // 使用了element-ui表单验证
+    userLogin() {
+      this.$refs.ruleForm.validate(async (valid) => {
+        if (valid) {
+          let { password, phone } = this.ruleForm;
+          try {
+            (password && phone) && await this.$store.dispatch("userLogin", { password, phone });
+            // 登录成功,跳转到首页
+            // this.$router.push('/home')
+            // 登录的组件:看其中是否包含query参数,有:调到query参数指定的路由,没有:调到home
+            console.log(this.$route.query.redirect);
+            let toPath = this.$route.query.redirect || '/home';
+            this.$router.push(toPath)
+          } catch (error) {
+            alert(error.message)
+          }
+        } else {
+          this.$message.warning("登录表单验证没通过,请重新登录")
+        }
+      })
+
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
