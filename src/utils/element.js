@@ -7,11 +7,18 @@ import {
     MessageBox,
     Alert,
     Message,
-    Pagination
+    Pagination,
+    Form,
+    FormItem,
+    Input
 } from 'element-ui';
 
 Vue.use(Button)
 Vue.use(Pagination)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Input)
+
 
 
 Vue.prototype.$msgbox = MessageBox;
