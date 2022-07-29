@@ -15,19 +15,19 @@
               <a href="###"
                  class="register">免费注册</a> -->
               <router-link to="/login">登录</router-link>
-              <router-link to="/register"
-                           class="register">免费注册</router-link>
+              <router-link to="/register" class="register">免费注册</router-link>
             </p>
             <!-- 已经登录 -->
             <p v-else>
-              <a>{{userName}}</a>
-              <a class="register"
-                 @click="logOut">退出登录</a>
+              <a>{{ userName }}</a>
+              <a class="register" @click="logOut">退出登录</a>
             </p>
           </div>
           <div class="typeList">
-            <a href="###">我的订单</a>
-            <a href="###">我的购物车</a>
+            <!-- <a href="###">我的订单</a>
+            <a href="###">我的购物车</a> -->
+            <router-link to="/center/myOrder">我的订单</router-link>
+            <router-link to="/shopCart">我的购物车</router-link>
             <a href="###">我的尚品汇</a>
             <a href="###">尚品汇会员</a>
             <a href="###">企业采购</a>
@@ -40,23 +40,14 @@
       <!--头部第二行 搜索区域-->
       <div class="bottom">
         <h1 class="logoArea">
-          <router-link to="/home"
-                       class="logo"
-                       title="尚品汇">
-            <img src="./images/logo.png"
-                 alt="">
+          <router-link to="/home" class="logo" title="尚品汇">
+            <img src="./images/logo.png" alt="">
           </router-link>
         </h1>
         <div class="searchArea">
-          <form action="###"
-                class="searchForm">
-            <input type="text"
-                   id="autocomplete"
-                   class="input-error input-xxlarge"
-                   v-model="kw" />
-            <button class="sui-btn btn-xlarge btn-danger"
-                    type="button"
-                    @click="goSearch()">搜索</button>
+          <form action="###" class="searchForm">
+            <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="kw" />
+            <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch()">搜索</button>
           </form>
         </div>
       </div>
@@ -66,20 +57,20 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       // 搜索关键词
       kw: ''
     }
   },
   computed: {
-    userName () {
+    userName() {
       return this.$store.state.UserAbout.userInfo.name
     }
   },
   methods: {
     // 1.搜索页面
-    goSearch () {
+    goSearch() {
       let location = {
         name: "search",
         params: {
@@ -95,7 +86,7 @@ export default {
       this.$router.push(location)
     },
     // 2.退出登录
-    async logOut () {
+    async logOut() {
       /* 退出登录逻辑：
       1. 通知后端服务器退出登录(清除一些数据)
       2. 清除项目中的一些信息[userInfo, token] */
@@ -109,11 +100,11 @@ export default {
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
-  created () {
+  created() {
 
   },
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted () {
+  mounted() {
     this.$bus.$on("removeKw", () => {
       this.kw = ''
     })
@@ -122,7 +113,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .header {
-  & > .top {
+  &>.top {
     background-color: #eaeaea;
     height: 30px;
     line-height: 30px;
@@ -153,7 +144,7 @@ export default {
         a {
           padding: 0 10px;
 
-          & + a {
+          &+a {
             border-left: 1px solid #b3aeae;
           }
         }
@@ -161,7 +152,7 @@ export default {
     }
   }
 
-  & > .bottom {
+  &>.bottom {
     width: 1200px;
     margin: 0 auto;
     overflow: hidden;

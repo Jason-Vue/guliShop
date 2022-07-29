@@ -7,12 +7,10 @@
         <div class="loginform">
           <ul class="tab clearFix">
             <li>
-              <a href="##"
-                 style="border-right: 0;">扫描登录</a>
+              <a href="##" style="border-right: 0;">扫描登录</a>
             </li>
             <li>
-              <a href="##"
-                 class="current">账户登录</a>
+              <a href="##" class="current">账户登录</a>
             </li>
           </ul>
 
@@ -20,46 +18,33 @@
             <form action="">
               <div class="input-text clearFix">
                 <i></i>
-                <input type="text"
-                       placeholder="手机号"
-                       v-model="phone">
+                <input type="text" placeholder="手机号" v-model="phone">
                 <span class="error-msg">错误提示信息</span>
               </div>
 
               <div class="input-text clearFix">
                 <i class="pwd"></i>
-                <input type="text"
-                       placeholder="请输入密码"
-                       v-model="password">
+                <input type="text" placeholder="请输入密码" v-model="password">
                 <span class="error-msg">错误提示信息</span>
               </div>
 
               <div class="setting clearFix">
                 <label class="checkbox inline">
-                  <input name="m1"
-                         type="checkbox"
-                         value="2"
-                         checked="">
+                  <input name="m1" type="checkbox" value="2" checked="">
                   自动登录
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn"
-                      @click.prevent="userLogin">登&nbsp;&nbsp;录</button>
+              <button class="btn" @click.prevent="userLogin">登&nbsp;&nbsp;录</button>
             </form>
             <div class="call clearFix">
               <ul>
-                <li><img src="images/qq.png"
-                       alt=""></li>
-                <li><img src="images/sina.png"
-                       alt=""></li>
-                <li><img src="images/ali.png"
-                       alt=""></li>
-                <li><img src="images/weixin.png"
-                       alt=""></li>
+                <li><img src="images/qq.png" alt=""></li>
+                <li><img src="images/sina.png" alt=""></li>
+                <li><img src="images/ali.png" alt=""></li>
+                <li><img src="images/weixin.png" alt=""></li>
               </ul>
-              <a href="##"
-                 class="register">立即注册</a>
+              <a href="##" class="register">立即注册</a>
             </div>
           </div>
         </div>
@@ -87,7 +72,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       password: '',
       phone: ''
@@ -95,23 +80,27 @@ export default {
   },
   methods: {
     // 1.用户登录
-    async userLogin () {
+    async userLogin() {
       let { password, phone } = this;
       try {
         (password && phone) && await this.$store.dispatch("userLogin", { password, phone });
         // 登录成功,跳转到首页
-        this.$router.push('/home')
+        // this.$router.push('/home')
+        // 登录的组件:看其中是否包含query参数,有:调到query参数指定的路由,没有:调到home
+        console.log(this.$route.query.redirect);
+        let toPath = this.$route.query.redirect || '/home';
+        this.$router.push(toPath)
       } catch (error) {
         alert(error.message)
       }
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
-  created () {
+  created() {
 
   },
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted () {
+  mounted() {
 
   }
 }
@@ -120,12 +109,14 @@ export default {
 .login-wrap {
   height: 487px;
   background-color: #e93854;
+
   .login {
     width: 1200px;
     height: 487px;
     margin: 0 auto;
     background: url(~@/assets/images/loginbg.png) no-repeat;
   }
+
   .loginform {
     width: 420px;
     height: 406px;
@@ -135,11 +126,13 @@ export default {
     top: 45px;
     position: relative;
     padding: 20px;
+
     .tab {
       li {
         width: 50%;
         float: left;
         text-align: center;
+
         a {
           width: 100%;
           display: block;
@@ -152,6 +145,7 @@ export default {
           box-sizing: border-box;
           text-decoration: none;
         }
+
         .current {
           border-bottom: none;
           border-top-color: #28a3ef;
@@ -159,6 +153,7 @@ export default {
         }
       }
     }
+
     .content {
       width: 380px;
       height: 316px;
@@ -166,13 +161,16 @@ export default {
       border: 1px solid #ddd;
       border-top: none;
       padding: 18px;
+
       form {
         margin: 15px 0 18px 0;
         font-size: 12px;
         line-height: 18px;
+
         .input-text {
           margin-bottom: 22px;
           position: relative;
+
           i {
             float: left;
             width: 37px;
@@ -182,9 +180,11 @@ export default {
             box-sizing: border-box;
             border-radius: 2px 0 0 2px;
           }
+
           .pwd {
             background-position: -72px -201px;
           }
+
           input {
             width: 302px;
             height: 32px;
@@ -210,14 +210,17 @@ export default {
             color: red;
           }
         }
+
         .setting {
           label {
             float: left;
           }
+
           .forget {
             float: right;
           }
         }
+
         .btn {
           background-color: #e1251b;
           padding: 6px;
@@ -233,20 +236,25 @@ export default {
           outline: none;
         }
       }
+
       .call {
         margin-top: 30px;
+
         ul {
           float: left;
+
           li {
             float: left;
             margin-right: 5px;
           }
         }
+
         .register {
           float: right;
           font-size: 15px;
           line-height: 38px;
         }
+
         .register:hover {
           color: #4cb9fc;
           text-decoration: underline;
@@ -255,11 +263,13 @@ export default {
     }
   }
 }
+
 .copyright {
   width: 1200px;
   margin: 0 auto;
   text-align: center;
   line-height: 24px;
+
   ul {
     li {
       display: inline-block;
