@@ -22,6 +22,13 @@ import "swiper/css/swiper.css"
 // 统一接口API文件夹里面的全部请求函数
 import * as API from "@/api/index.js"
 
+// 使用懒加载
+import VueLazyload from 'vue-lazyload'
+import time from "@/assets/timg.png"
+Vue.use(VueLazyload, {
+  loading: time
+})
+
 // import "@/api/test"
 // import {
 //   reqSearchList
@@ -36,6 +43,6 @@ new Vue({
   store: store,
   beforeCreate() {
     Vue.prototype.$bus = this;
-    Vue.prototype.$API=API
+    Vue.prototype.$API = API
   }
 }).$mount('#app')

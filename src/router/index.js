@@ -55,7 +55,26 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     // 2.用户未登录
-    next()
+    /*  
+    一.未登录不可以访问:
+     1. 交易页面(Trade)
+     2. 支付相关(Pay, PaySuccess)页面
+     3. 用户中心(Center)相关页面 
+    二.未登录去上面那些页面，需要跳转到登录页面  
+    如果去的是别的页面，例如(home,search,detail)页面放行
+     */
+    let toPath = to.path;
+    // if (toPath == '/trade') {
+    if (toPath.indexOf('trade') != -1 || toPath.indexOf('pay') != -1 || toPath.indexOf('center') != -1) {
+      console.log(toPath);
+      // 把未登录的时候想去而没有去成的信息，存储于地址栏中[路由]
+      next('/login?redirect=' + toPath)
+      // next('/login')
+    } else {
+      // 如果去的是别的页面，例如(home,search,detail)页面放行
+      next()
+    }
+
   }
 })
 
