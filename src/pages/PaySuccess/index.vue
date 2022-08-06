@@ -20,16 +20,16 @@
 <script>
 export default {
   name: 'PaySuccess',
-  beforeRouteEnter(to, from) {
-    // 在渲染该组件的对应路由被验证前调用
-    // 不能获取组件实例 `this` ！
-    // 因为当守卫执行时，组件实例还没被创建！
-    if (from.path == '/pay') {
-      next()
-    } else {
-      next(false)
-    }
-  },
+  // beforeRouteEnter(to, from) {
+  //   // 在渲染该组件的对应路由被验证前调用
+  //   // 不能获取组件实例 `this` ！
+  //   // 因为当守卫执行时，组件实例还没被创建！
+  //   if (from.path == '/pay') {
+  //     next()
+  //   } else {
+  //     next(false)
+  //   }
+  // },
   // beforeRouteUpdate(to, from) {
   // 在当前路由改变，但是该组件被复用时调用
   // 举例来说，对于一个带有动态参数的路径 `/users/:id`，在 `/users/1` 和 `/users/2` 之间跳转的时候，
