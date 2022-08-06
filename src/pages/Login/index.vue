@@ -66,7 +66,8 @@
                 <li><img src="images/ali.png" alt=""></li>
                 <li><img src="images/weixin.png" alt=""></li> -->
               </ul>
-              <a href="##" class="register">立即注册</a>
+              <!-- <a href="##" class="register">立即注册</a> -->
+              <router-link to="/register" class="register">立即注册</router-link>
             </div>
           </div>
         </div>
