@@ -36,6 +36,8 @@ Vue.use(VueLazyload, {
 
 Vue.config.productionTip = false;
 
+// console.log('当前地址', process.env.VUE_APP_URL)
+
 new Vue({
   render: (h) => h(App),
   router: router,

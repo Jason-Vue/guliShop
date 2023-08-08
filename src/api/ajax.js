@@ -5,6 +5,9 @@ import "nprogress/nprogress.css"
 import store from "@/store/index.js"
 
 const instance = axios.create({
+  baseURL: process.env.VUE_APP_URL,
+  responseType: "json",
+  // baseURL: process.env.VUE_APP_BASE_API,
   baseURL: '/api',
   timeout: 3000,
 })
