@@ -4,14 +4,15 @@
     <div class="floor">
       <div class="py-container">
         <div class="title clearfix">
-          <h3 class="fl">{{floor.name}}</h3>
+          <h3 class="fl">{{ floor.name }}</h3>
           <div class="fr">
             <ul class="nav-tabs clearfix">
-              <li class="active"
-                  v-for="(list,index) in floor.navList"
-                  :key="index">
-                <a :href="list.url"
-                   data-toggle="tab">{{list.text}}</a>
+              <li
+                class="active"
+                v-for="(list, index) in floor.navList"
+                :key="index"
+              >
+                <a :href="list.url" data-toggle="tab">{{ list.text }}</a>
               </li>
             </ul>
           </div>
@@ -21,19 +22,21 @@
             <div class="floor-1">
               <div class="blockgary">
                 <ul class="jd-list">
-                  <li v-for="(kw,index) in floor.keywords"
-                      :key="index">{{kw}}</li>
+                  <li v-for="(kw, index) in floor.keywords" :key="index">
+                    {{ kw }}
+                  </li>
                 </ul>
                 <img :src="floor.imgUrl" />
               </div>
               <div class="floorBanner">
-                <div class="swiper-container"
-                     ref="floorSwiper">
+                <div class="swiper-container" ref="floorSwiper">
                   <div class="swiper-wrapper">
-                    <div class="swiper-slide"
-                         v-for="(carousel,index) in floor.carouselList"
-                         :key="carousel.id">
-                      <img :src="carousel.imageUrl">
+                    <div
+                      class="swiper-slide"
+                      v-for="(carousel, index) in floor.carouselList"
+                      :key="carousel.id"
+                    >
+                      <img :src="carousel.imageUrl" />
                     </div>
                   </div>
                   <!-- 如果需要分页器 -->
@@ -74,26 +77,22 @@
 </template>
 
 <script>
-import Swiper from "swiper"
+import Swiper from "swiper";
 export default {
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
   props: {
     floor: {
       type: Object,
       default: {},
-      require: true
-    }
+      require: true,
+    },
   },
   //生命周期 - 创建完成（访问当前this实例）
-  created () {
-
-  },
+  created() {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted () {
+  mounted() {
     /* 
     这里的配置new Swiper不需要使用watch+$nextTick(()=>{})是因为，这里的数据并不是异步请求的，
     而是由Home的index页面通过props方法传给floor组件的，所以数据是一定会拿到的，所以就不会出问题
@@ -102,26 +101,26 @@ export default {
       // direction: 'vertical', // 垂直切换选项
       loop: true, // 循环模式选项
       autoplay: {
-        delay: 2000
+        delay: 2000,
       },
       // 如果需要分页器
       pagination: {
-        el: '.swiper-pagination',
+        el: ".swiper-pagination",
       },
 
       // 如果需要前进后退按钮
       navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
       },
 
       // 如果需要滚动条
       scrollbar: {
-        el: '.swiper-scrollbar',
+        el: ".swiper-scrollbar",
       },
-    })
-  }
-}
+    });
+  },
+};
 </script>
 <style lang="less" scoped>
 .floor {

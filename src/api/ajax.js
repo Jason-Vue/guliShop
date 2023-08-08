@@ -20,6 +20,7 @@ instance.interceptors.request.use((config) => {
   if (store.state.UserAbout.token) {
     config.headers.token = store.state.UserAbout.token
   }
+  // 进度条开始
   nprogress.start()
   return config
 }, (error) => {
@@ -28,6 +29,7 @@ instance.interceptors.request.use((config) => {
 
 // 响应拦截器
 instance.interceptors.response.use((config) => {
+  // 进度条结束
   nprogress.done()
   return config.data
 }, (error) => {

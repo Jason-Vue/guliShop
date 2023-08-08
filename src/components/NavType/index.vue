@@ -5,45 +5,59 @@
     <div class="type-nav">
       <div class="container">
         <div @mouseleave="deleteIndex()">
-          <h2 class="all"
-              @mouseenter="categoryShow">全部商品分类</h2>
+          <h2 class="all" @mouseenter="categoryShow">全部商品分类</h2>
           <!-- 过渡动画 -->
           <transition name="sort">
-            <div class="sort"
-                 v-show="isShow">
+            <div class="sort" v-show="isShow">
               <!-- 点击搜索事件：事件委派 -->
-              <div class="all-sort-list2"
-                   @click="goSearch">
+              <div class="all-sort-list2" @click="goSearch">
                 <!-- 一级分类 -->
-                <div class="item bo"
-                     v-for="(c1,index) in categoryList"
-                     :key="c1.categoryId"
-                     @mouseenter="deliverIndex(index)"
-                     :class="{bgc:currentIndex==index}">
+                <div
+                  class="item bo"
+                  v-for="(c1, index) in categoryList"
+                  :key="c1.categoryId"
+                  @mouseenter="deliverIndex(index)"
+                  :class="{ bgc: currentIndex == index }"
+                >
                   <h3>
-                    <a href="javascript:;"
-                       :data-categoryName="c1.categoryName"
-                       :data-category1Id="c1.categoryId">{{c1.categoryName}}</a>
+                    <a
+                      href="javascript:;"
+                      :data-categoryName="c1.categoryName"
+                      :data-category1Id="c1.categoryId"
+                      >{{ c1.categoryName }}</a
+                    >
                   </h3>
-                  <div class="item-list clearfix"
-                       :style="{display:(index==currentIndex?'block':'')}">
+                  <div
+                    class="item-list clearfix"
+                    :style="{ display: index == currentIndex ? 'block' : '' }"
+                  >
                     <!-- 二级分类 -->
-                    <div class="subitem"
-                         v-for="(c2,index) in c1.categoryChild"
-                         :key="c2.categoryId">
+                    <div
+                      class="subitem"
+                      v-for="(c2, index) in c1.categoryChild"
+                      :key="c2.categoryId"
+                    >
                       <dl class="fore">
                         <dt>
-                          <a :data-categoryName="c2.categoryName"
-                             :data-category2Id="c2.categoryId"
-                             href="javascript:;">{{c2.categoryName}}</a>
+                          <a
+                            :data-categoryName="c2.categoryName"
+                            :data-category2Id="c2.categoryId"
+                            href="javascript:;"
+                            >{{ c2.categoryName }}</a
+                          >
                           <!-- 三级分类 -->
                         </dt>
                         <dd>
-                          <em v-for="(c3,index) in c2.categoryChild"
-                              :key="c3.categoryId">
-                            <a :data-categoryName="c3.categoryName"
-                               :data-category3Id="c3.categoryId"
-                               href="javascript:;">{{c3.categoryName}}</a>
+                          <em
+                            v-for="(c3, index) in c2.categoryChild"
+                            :key="c3.categoryId"
+                          >
+                            <a
+                              :data-categoryName="c3.categoryName"
+                              :data-category3Id="c3.categoryId"
+                              href="javascript:;"
+                              >{{ c3.categoryName }}</a
+                            >
                           </em>
                         </dd>
                       </dl>
@@ -65,27 +79,26 @@
           <a href="###">有趣</a>
           <a href="###">秒杀</a>
         </nav>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import throttle from "lodash/throttle"
+import throttle from "lodash/throttle";
 export default {
-  data () {
+  data() {
     return {
       // 为了给一级分类添加背景颜色，单独给它一个脚标
       currentIndex: -1,
       // 一二三级分类是否显示
-      isShow: true
-    }
+      isShow: true,
+    };
   },
   computed: {
-    categoryList () {
-      return this.$store.state.HomeAbout.typeNavList
-    }
+    categoryList() {
+      return this.$store.state.HomeAbout.typeNavList;
+    },
   },
   methods: {
     // 1.一级分类鼠标移入显示背景事件
@@ -99,14 +112,14 @@ export default {
       // console.log(index);
     }, 50),
     // 2.一级分类鼠标移出事件隐藏背景事件(同样这也是search搜索页面移出事件隐藏一二三级分类)
-    deleteIndex () {
+    deleteIndex() {
       this.currentIndex = -1;
-      if (this.$route.path != '/home') {
-        this.isShow = false
+      if (this.$route.path != "/home") {
+        this.isShow = false;
       }
     },
     // 3.去搜索页面
-    goSearch (event) {
+    goSearch(event) {
       /* 
       最好的解决办法:事件委派+编程式导航
       1.怎么确定就是点击的a标签？获取到当前这个事件的节点【dt,dd,h3,a】,需要带有data-categoryName
@@ -117,51 +130,50 @@ export default {
       // 节点上有一个属性dataset属性，可以获取节点的自定义属性和属性值
       let node = element.dataset;
       // console.log(node);
-      let { categoryname, category1id, category2id, category3id } = element.dataset;
+      let { categoryname, category1id, category2id, category3id } =
+        element.dataset;
       // 整理编程式导航跳转地址，下面的location里面还要一个query参数对象
-      let location = { name: 'search' };
+      let location = { name: "search" };
       // 整理上面location需要的query参数对象
       let query = { categoryName: categoryname };
       // 一级分类，二级分类，三级分类的a标签
       // 如果身上有categoryName属性就一定就是a标签
       if (categoryname) {
         if (category1id) {
-          query.category1Id = category1id
+          query.category1Id = category1id;
         } else if (category2id) {
-          query.category2Id = category2id
+          query.category2Id = category2id;
         } else {
-          query.category3Id = category3id
+          query.category3Id = category3id;
         }
       }
       // 将query对象放到location里面
       location.query = query;
       // 判断是否有params传参方式,没有的话把它放进location里
       if (this.$route.params) {
-        location.params = this.$route.params
+        location.params = this.$route.params;
       }
       console.log(location);
       // 跳转到搜索页
-      this.$router.push(location)
+      this.$router.push(location);
     },
     // 4.搜索页面里面的一二三级分类显示
-    categoryShow () {
-      this.isShow = true
-    }
+    categoryShow() {
+      this.isShow = true;
+    },
   },
   //生命周期 - 创建完成（访问当前this实例）
-  created () {
-
-  },
+  created() {},
   //生命周期 - 挂载完成（访问DOM元素）
-  mounted () {
+  mounted() {
     // 1.派发事件给actions,请求navType三级分类
     // this.$store.dispatch('getCategoryList');
     //2.在NavType页面挂载完毕的时候，将isShow改为false
-    if (this.$route.path != '/home') {
-      this.isShow = false
+    if (this.$route.path != "/home") {
+      this.isShow = false;
     }
-  }
-}
+  },
+};
 </script>
 <style lang="less" scoped>
 .type-nav {
