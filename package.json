@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve --open --host localhost --port 8010",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist -r https://github.com/Jason-Vue/guliShop.git -b gh-pages"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -28,6 +30,7 @@
     "babel-plugin-component": "^1.1.1",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "gh-pages": "^5.0.0",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
     "vue-router": "^3.2.0",
