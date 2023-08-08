@@ -3,6 +3,7 @@ const {
 } = require('@vue/cli-service')
 
 module.exports = defineConfig({
+  publicPath: '.',
   transpileDependencies: true,
   // 关闭Eslint
   lintOnSave: false,
