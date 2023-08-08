@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkmy_gulishop"]=self["webpackChunkmy_gulishop"]||[]).push([[308],{8308:function(e,t,n){n.r(t),n.d(t,{default:function(){return i}});var u=function(){var e=this,t=e.$createElement;e._self._c;return e._m(0)},r=[function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",[n("h1",[e._v("团购订单")])])}],l={data(){return{}},methods:{},created(){},mounted(){}},s=l,c=n(3736),a=(0,c.Z)(s,u,r,!1,null,null,null),i=a.exports}}]);
+//# sourceMappingURL=308.7e4893f6.js.map
